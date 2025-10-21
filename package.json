@@ -1,6 +1,8 @@
 {
     "devDependencies": {
         "@eslint/js": "^9.37.0",
+        "browser-sync": "^3.0.4",
+        "concurrently": "^9.2.1",
         "eslint": "^9.37.0",
         "fs-extra": "^11.3.2",
         "globals": "^16.4.0",
@@ -13,7 +15,9 @@
         "lint:js": "eslint js",
         "lint:css": "stylelint css",
         "lint:html": "htmlhint **/*.html",
-        "dev": "npx esbuild js/*.js --bundle --outdir=dist --servedir=. --serve=8080",
+        "dev": "npx esbuild js/*.js --bundle --outdir=dist --servedir=. --serve=8080 --watch",
+        "dev:sync": "browser-sync start --server --files 'css/*.css, js/**/*.js, *.html, assets/**/*' --port 3000 --no-open --ignore 'node_modules'",
+        "dev:hot": "concurrently \"npx esbuild js/*.js --bundle --outdir=dist --watch\" \"browser-sync start --server --files 'dist/*.js, css/*.css, *.html, assets/**/*' --port 3000 --no-open\"",
         "build": "npx esbuild js/*.js --bundle --minify --outdir=dist",
         "build:public": "npm run build && node -e \"const fs = require('fs-extra'); fs.ensureDir('public').then(() => Promise.all(['assets', 'css', 'dist', 'index.html', 'dashboard.html'].map((f) => fs.copy(f, 'public/' + f)))).then(() => console.log('✅ Successfully!'));\""
     },
